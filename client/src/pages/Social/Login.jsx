@@ -80,7 +80,7 @@ const Login = () => {
         <p className="text-center mt-3">
           New To{" "}
           <Link className="text-orange-500 font-bold" to="/register">
-            Register
+            Sign Up
           </Link>
         </p>
       </div>
