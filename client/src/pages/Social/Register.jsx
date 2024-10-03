@@ -1,9 +1,35 @@
 import { Link } from "react-router-dom";
-import registerImg from "../../assets/images/login/login.svg"
+import registerImg from "../../assets/images/login/login.svg";
+import useAuth from "../../hook/useAuth";
+import Swal from "sweetalert2";
 
 const Register = () => {
-    return (
-        <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl mt-12 mb-12" >
+  const { createUser } = useAuth();
+  const handelRegister = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    console.log(name, email, password);
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        Swal.fire({
+            title: 'Success!',
+            text: 'Register Successful',
+            icon: 'success',
+            confirmButtonText: 'Success'
+          })
+          form.reset()
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  return (
+    <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl mt-12 mb-12">
       <div
         className="hidden bg-cover lg:block lg:w-1/2"
         style={{ backgroundImage: `url(${registerImg})` }}
@@ -11,54 +37,57 @@ const Register = () => {
 
       <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
         <p className="mt-3 text-xl text-center text-gray-600 dark:text-gray-200 font-bold">
-        Sign Up
+          Sign Up
         </p>
 
-        <div className="mt-4">
-          <label
-            className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
-            htmlFor="LoggingName"
-          >
-            Name
-          </label>
-          <input
-            id="LoggingName"
-            className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
-            type="email"
-          />
-        </div>
-        <div className="mt-4">
-          <label
-            className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
-            htmlFor="LoggingEmailAddress"
-          >
-            Email Address
-          </label>
-          <input
-            id="LoggingEmailAddress"
-            className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
-            type="email"
-          />
-        </div>
-        <div className="mt-4">
-          <div className="flex justify-between">
+        <form onSubmit={handelRegister}>
+          <div className="mt-4">
             <label
               className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
-              htmlFor="loggingPassword"
+              htmlFor="LoggingName"
             >
-              Password
+              Name
             </label>
+            <input
+              id="LoggingName"
+              className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
+              type="text"
+              name="name"
+            />
           </div>
-          <input
-            id="loggingPassword"
-            className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
-            type="password"
-          />
-        </div>
-
+          <div className="mt-4">
+            <label
+              className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
+              htmlFor="LoggingEmailAddress"
+            >
+              Email Address
+            </label>
+            <input
+              id="LoggingEmailAddress"
+              className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
+              type="email"
+              name="email"
+            />
+          </div>
+          <div className="mt-4">
+            <div className="flex justify-between">
+              <label
+                className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
+                htmlFor="loggingPassword"
+              >
+                Password
+              </label>
+            </div>
+            <input
+              id="loggingPassword"
+              className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
+              type="password"
+              name="password"
+            />
+          </div>
         <div className="mt-6">
           <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-orange-600 rounded-lg hover:bg-orange-500 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50">
-          Sign Up
+            Sign Up
           </button>
         </div>
         <p className="text-xs text-center mt-3">Or Sign In with</p>
@@ -85,14 +114,15 @@ const Register = () => {
           </div>
         </button>
         <p className="text-center mt-3">
-        Have an account?{" "}
+          Have an account?{" "}
           <Link className="text-orange-500 font-bold" to="/login">
-           Sign In
+            Sign In
           </Link>
         </p>
+        </form>
       </div>
     </div>
-    );
+  );
 };
 
 export default Register;
