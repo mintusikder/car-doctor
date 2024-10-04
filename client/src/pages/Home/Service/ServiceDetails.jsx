@@ -1,4 +1,5 @@
 import { FaArrowRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 const ServiceDetails = ({ service }) => {
   const { title, img, price, _id } = service;
   return (
@@ -12,7 +13,7 @@ const ServiceDetails = ({ service }) => {
           <p  className="flex items-start text-orange-500 font-bold">${price} </p>
         </div>
         <div className="card-actions">
-        <FaArrowRight className="text-orange-500 mt-[50px]" />
+        <Link to="/checkout"><FaArrowRight className="text-orange-500 mt-[50px]" /></Link>
         </div>
       </div>
     </div>
