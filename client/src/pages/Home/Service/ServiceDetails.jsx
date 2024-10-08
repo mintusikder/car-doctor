@@ -13,7 +13,7 @@ const ServiceDetails = ({ service }) => {
           <p  className="flex items-start text-orange-500 font-bold">${price} </p>
         </div>
         <div className="card-actions">
-        <Link to="/checkout"><FaArrowRight className="text-orange-500 mt-[50px]" /></Link>
+        <Link to={`/checkout/${_id}`}><FaArrowRight className="text-orange-500 mt-[50px]" /></Link>
         </div>
       </div>
     </div>
