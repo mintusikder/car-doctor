@@ -22,30 +22,44 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const servicesCollection = client.db("carDoctor").collection("services");
-    const bookingCollection = client.db("carDoctor").collection("bookings")
+    const bookingCollection = client.db("carDoctor").collection("bookings");
     app.get("/services", async (req, res) => {
       const result = await servicesCollection.find().toArray();
       res.send(result);
     });
 
-    app.get("/services/:id", async (req, res)=>{
-        const id = req.params.id 
-        const query = {_id: new ObjectId(id)}
-        const options = {
-          projection: { service_id: 1, title: 1, price: 1, _id: 1, img: 1 },
-        };
-        const result = await servicesCollection.findOne(query, options);
-        res.send(result);
-    })
+    app.get("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const options = {
+        projection: { service_id: 1, title: 1, price: 1, _id: 1, img: 1 },
+      };
+      const result = await servicesCollection.findOne(query, options);
+      res.send(result);
+    });
 
     //booking
-    app.post("/bookings",async(req, res) =>{
-      const booking = req.body 
-      console.log(booking)
-      const result = await bookingCollection.insertOne(booking)
-      res.send(result) 
-    })
-    
+    app.get("/bookings", async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const result = await bookingCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.post("/bookings", async (req, res) => {
+      const booking = req.body;
+      console.log(booking);
+      const result = await bookingCollection.insertOne(booking);
+      res.send(result);
+    });
+    app.delete("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await bookingCollection.deleteOne(query);
+      res.send(result);
+    });
+
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
