@@ -30,6 +30,22 @@ const Bookings = () => {
         });
     }
   };
+  const handelConfirm = (id) => {
+    fetch(`http://localhost:5000/bookings/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ status: "confirm" }),
+    })
+      .then((res) => res.json)
+      .then((data) => {
+        console.log(data);
+        if (data.modifiedCount > 0) {
+          //update
+        }
+      });
+  };
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -52,6 +68,7 @@ const Bookings = () => {
               booking={booking}
               key={booking._id}
               handelDelete={handelDelete}
+              handelConfirm={handelConfirm}
             ></BookingsDetails>
           ))}
         </tbody>

@@ -1,11 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImg from "../../assets/images/login/login.svg";
 import useAuth from "../../hook/useAuth";
 import Swal from "sweetalert2";
 const Login = () => {
   const { loginUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  console.log(location);
   const handelLogin = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
@@ -21,6 +24,7 @@ const Login = () => {
           icon: "success",
           confirmButtonText: "Success",
         });
+        navigate(location?.state ? location?.state : "/");
         form.reset();
       })
       .catch((error) => {

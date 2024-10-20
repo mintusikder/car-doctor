@@ -1,4 +1,4 @@
-const BookingsDetails = ({ booking, handelDelete }) => {
+const BookingsDetails = ({ booking, handelDelete, handelConfirm }) => {
   const { customerName, email, date, img, price, _id } = booking;
 
   return (
@@ -43,7 +43,12 @@ const BookingsDetails = ({ booking, handelDelete }) => {
         <td>{price}</td>
         <td>{date}</td>
         <th>
-          <button className="btn btn-ghost btn-xs">details</button>
+          <button
+            onClick={() => handelConfirm(_id)}
+            className="btn btn-ghost btn-xs"
+          >
+            Confirm
+          </button>
         </th>
       </tr>
     </>
