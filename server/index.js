@@ -1,17 +1,20 @@
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
+const cookieParser = require('cookie-parser');
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors({
-  origin : ["http://localhost:5173"],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
 app.use(express.json());
-
+app.use(cookieParser())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rmmjiwd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -22,6 +25,12 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+
+//make middlewares 
+const logger = async(req,res,next) =>{
+console.log("called:", req.host, req.originalUrl)
+next()
+}
 
 async function run() {
   try {
@@ -62,6 +71,7 @@ async function run() {
 
     //booking
     app.get("/bookings", async (req, res) => {
+      console.log("token", req.cookies.token);
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };

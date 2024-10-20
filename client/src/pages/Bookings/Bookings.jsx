@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../hook/useAuth";
 import BookingsDetails from "./BookingsDetails";
+import axios from "axios";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
   const { user } = useAuth();
   const url = `http://localhost:5000/bookings?email=${user?.email}`;
   useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setBookings(data);
-      });
+    axios.get(url , {withCredentials: true})
+    .then(res => {
+      setBookings(res.data)
+    })
+    // fetch(url)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setBookings(data);
+    //   });
   }, []);
   const handelDelete = (id) => {
     const proceed = confirm("Are sure you want to delete");
