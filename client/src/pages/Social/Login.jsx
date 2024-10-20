@@ -28,10 +28,15 @@ const Login = () => {
         });
         // navigate(location?.state ? location?.state : "/");
         //get access token
-        axios.post("http://localhost:5000/jwt", user).then((res) => {
-          console.log(res.data);
-        });
-        form.reset();
+        axios
+          .post("http://localhost:5000/jwt", user, { withCredentials: true })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.success) {
+              navigate(location?.state ? location?.state : "/");
+            }
+          });
+        // form.reset();
       })
       .catch((error) => {
         console.log(error);
