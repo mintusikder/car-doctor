@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImg from "../../assets/images/login/login.svg";
 import useAuth from "../../hook/useAuth";
 import Swal from "sweetalert2";
+import axios from "axios";
 const Login = () => {
   const { loginUser } = useAuth();
   const location = useLocation();
@@ -16,15 +17,20 @@ const Login = () => {
     loginUser(email, password)
       .then((result) => {
         // Signed in
-        const user = result.user;
-        console.log(user);
+        const loggedInUser = result.user;
+        console.log(loggedInUser);
+        const user = { email };
         Swal.fire({
           title: "Success!",
           text: "Login Successful",
           icon: "success",
           confirmButtonText: "Success",
         });
-        navigate(location?.state ? location?.state : "/");
+        // navigate(location?.state ? location?.state : "/");
+        //get access token
+        axios.post("http://localhost:5000/jwt", user).then((res) => {
+          console.log(res.data);
+        });
         form.reset();
       })
       .catch((error) => {
