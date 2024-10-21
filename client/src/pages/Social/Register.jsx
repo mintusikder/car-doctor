@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import registerImg from "../../assets/images/login/login.svg";
 import useAuth from "../../hook/useAuth";
 import Swal from "sweetalert2";
 
 const Register = () => {
-  const { createUser } = useAuth();
+  const { createUser,googleLogin } = useAuth();
+  const navigate = useNavigate()
+  const location = useLocation()
   const handelRegister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -22,7 +24,19 @@ const Register = () => {
             icon: 'success',
             confirmButtonText: 'Success'
           })
+          navigate(location?.state ? location?.state : "/");
           form.reset()
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const handelGoogleLogin = () => {
+    googleLogin()
+      .then((result) => {
+        const user = result.user;
+        navigate(location?.state ? location?.state : "/");
+        console.log(user);
       })
       .catch((error) => {
         console.log(error);
@@ -91,7 +105,7 @@ const Register = () => {
           </button>
         </div>
         <p className="text-xs text-center mt-3">Or Sign In with</p>
-        <button className="flex items-center mx-auto justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <button onClick={handelGoogleLogin} className="flex items-center mx-auto justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
           <div className="px-4 py-2">
             <svg className="w-6 h-6" viewBox="0 0 40 40">
               <path
